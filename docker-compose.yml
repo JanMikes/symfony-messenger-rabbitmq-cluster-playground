@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+    # Helper service
+    composer:
+        image: rabbitmq-playground
+        build: .
+        volumes:
+            - .:/app
+        working_dir: /app
+        entrypoint: "composer"
+        command: [ "install", "--no-interaction" ]
+
+    postgres:
+        # alpine is forbidden => https://stackoverflow.com/questions/58135353/postgres-seems-to-be-ignoring-my-default-collation
+        image: postgres:13
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: pass
+        volumes:
+            - .docker-data/postgres:/var/lib/postgresql/data
+        ports:
+            - "${POSTGRES_PORT:-5432}:5432"
+
+    adminer:
+        image: adminer:4.8.0
+        ports:
+            - "${ADMINER_PORT:-8000}:8080"
+        depends_on:
+            - postgres

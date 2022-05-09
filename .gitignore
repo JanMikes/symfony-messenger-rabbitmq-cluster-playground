@@ -1,0 +1,7 @@
+.docker-data/
+var/
+vendor/
+
+.env.local
+.env.local.php
+.env.*.local

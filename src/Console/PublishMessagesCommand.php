@@ -39,7 +39,7 @@ final class PublishMessagesCommand extends Command
         for ($i = 0; $i<= $messagesCount; $i++) {
             $randomNumber = random_int(1, 10);
 
-            $this->bus->dispatch(new DoSomething($randomNumber));
+            $this->bus->dispatch(new DoSomething($i, $randomNumber));
         }
 
         return Command::SUCCESS;

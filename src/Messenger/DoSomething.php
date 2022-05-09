@@ -7,6 +7,7 @@ namespace App\Messenger;
 final class DoSomething
 {
     public function __construct(
+        public readonly int $sequence,
         public readonly int $randomNumber,
     ) {}
 }

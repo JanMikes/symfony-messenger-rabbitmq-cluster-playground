@@ -19,7 +19,7 @@ services:
         volumes:
             - .:/app
         working_dir: /app
-        command: [ "bin/console", "messenger:consume", "doctrine" ]
+        command: [ "bin/console", "messenger:consume" ]
         depends_on:
             - postgres
             - rabbitmq1

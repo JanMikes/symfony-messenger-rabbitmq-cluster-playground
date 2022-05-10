@@ -13,16 +13,13 @@ framework:
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
+                    cacert: '%env(MESSENGER_CACERT_PATH)%'
                     delay:
                         queue_name_pattern: '%%exchange_name%%_%%routing_key%%_delay_%%delay%%'
-                    queues:
-                        messages:
-                            arguments:
-                                x-queue-type: quorum
                 retry_strategy:
                     max_retries: 3
-                    delay: 5000 # milliseconds delay
-                    multiplier: 2
+                    delay: 1000 # milliseconds delay
+                    multiplier: 1
 
             failed: 'doctrine://default?queue_name=failed'
             sync: 'sync://'

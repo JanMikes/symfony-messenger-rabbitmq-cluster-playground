@@ -10,21 +10,15 @@ services:
         entrypoint: [ "/entrypoint.sh" ]
         depends_on:
             - postgres
-            - rabbitmq1
-            - rabbitmq2
-            - rabbitmq3
 
     worker:
         image: rabbitmq-playground
         volumes:
             - .:/app
         working_dir: /app
-        command: [ "bin/console", "messenger:consume" ]
+        command: [ "bash", "-c", "sleep 5 && bin/console messenger:consume" ]
         depends_on:
             - postgres
-            - rabbitmq1
-            - rabbitmq2
-            - rabbitmq3
 
     postgres:
         # alpine is forbidden => https://stackoverflow.com/questions/58135353/postgres-seems-to-be-ignoring-my-default-collation

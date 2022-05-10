@@ -15,6 +15,8 @@ final class PersistentMessage
     #[Id, GeneratedValue, Column(type: 'integer')]
     public $id;
 
-    #[Column(type: 'integer')]
-    public $sequence;
+    public function __construct(
+        #[Column(type: 'integer')]
+        public int $sequence
+    ) {}
 }

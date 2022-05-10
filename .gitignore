@@ -5,3 +5,5 @@ vendor/
 .env.local
 .env.local.php
 .env.*.local
+
+docker-compose.override.yml

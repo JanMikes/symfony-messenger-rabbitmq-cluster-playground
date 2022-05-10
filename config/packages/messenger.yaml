@@ -13,9 +13,12 @@ framework:
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    queue:
-                        arguments:
-                            x-queue-type: quorum
+                    delay:
+                        queue_name_pattern: '%%exchange_name%%_%%routing_key%%_delay_%%delay%%'
+                    queues:
+                        messages:
+                            arguments:
+                                x-queue-type: quorum
                 retry_strategy:
                     max_retries: 3
                     delay: 5000 # milliseconds delay

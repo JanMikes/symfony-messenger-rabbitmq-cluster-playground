@@ -26,20 +26,20 @@ If succeeded (80% chance), it will persist the message into database table `pers
 
 ### Retrying
 ```bash
-$ bin/console messenger:failed:show
+docker-compose run --rm php bin/console messenger:failed:show
 
 # see details about a specific failure
-$ bin/console messenger:failed:show 20 -vv
+docker-compose run --rm php bin/console messenger:failed:show 20 -vv
 
 # view and retry messages one-by-one
-$ bin/console messenger:failed:retry -vv
+docker-compose run --rm php bin/console messenger:failed:retry -vv
 
 # retry specific messages
-$ bin/console messenger:failed:retry 20 30 --force
+docker-compose run --rm php bin/console messenger:failed:retry 20 30 --force
 
 # remove a message without retrying it
-$ bin/console messenger:failed:remove 20
+docker-compose run --rm php bin/console messenger:failed:remove 20
 
 # remove messages without retrying them and show each message before removing it
-$ bin/console messenger:failed:remove 20 30 --show-messages
+docker-compose run --rm php bin/console messenger:failed:remove 20 30 --show-messages
 ```

@@ -16,7 +16,7 @@ final class PublishMessagesCommand extends Command
 {
     private const messagesCountArgument = 'messagesCount';
 
-    protected static $defaultName = 'app:publish-messages';
+    protected static $defaultName = 'app:publish';
 
 
     public function __construct(
@@ -36,11 +36,11 @@ final class PublishMessagesCommand extends Command
     {
         $messagesCount = (int) $input->getArgument(self::messagesCountArgument);
 
-        for ($i = 0; $i<= $messagesCount; $i++) {
-            $randomNumber = random_int(1, 10);
-
-            $this->bus->dispatch(new DoSomething($i, $randomNumber));
+        for ($i=0; $i<=$messagesCount; $i++) {
+            $this->bus->dispatch(new DoSomething($i));
         }
+
+        $output->writeln("<info>Published $messagesCount messages</info>");
 
         return Command::SUCCESS;
     }

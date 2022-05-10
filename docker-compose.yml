@@ -1,14 +1,30 @@
 version: "3.7"
 services:
-    # Helper service
-    composer:
+    php:
         image: rabbitmq-playground
         build: .
         volumes:
             - .:/app
+            - .docker/entrypoint.sh:/entrypoint.sh
         working_dir: /app
-        entrypoint: "composer"
-        command: [ "install", "--no-interaction" ]
+        entrypoint: [ "/entrypoint.sh" ]
+        depends_on:
+            - postgres
+            - rabbitmq1
+            - rabbitmq2
+            - rabbitmq3
+
+    worker:
+        image: rabbitmq-playground
+        volumes:
+            - .:/app
+        working_dir: /app
+        command: [ "bin/console", "messenger:consume", "doctrine" ]
+        depends_on:
+            - postgres
+            - rabbitmq1
+            - rabbitmq2
+            - rabbitmq3
 
     postgres:
         # alpine is forbidden => https://stackoverflow.com/questions/58135353/postgres-seems-to-be-ignoring-my-default-collation
@@ -16,6 +32,7 @@ services:
         environment:
             POSTGRES_USER: user
             POSTGRES_PASSWORD: pass
+            POSTGRES_DB: test
         volumes:
             - .docker-data/postgres:/var/lib/postgresql/data
         ports:
@@ -29,7 +46,7 @@ services:
             - postgres
 
     rabbitmq1:
-        image: docker.io/bitnami/rabbitmq:3.9
+        image: bitnami/rabbitmq:3.9
         restart: unless-stopped
         environment:
             - RABBITMQ_NODE_TYPE=stats
@@ -39,10 +56,10 @@ services:
         ports:
             - "15672:15672"
         volumes:
-            - .docker-data/rabbitmq1:/bitnami/rabbitmq/mnesia
+            - .docker-data/rabbitmq1:/bitnami
 
     rabbitmq2:
-        image: docker.io/bitnami/rabbitmq:3.9
+        image: bitnami/rabbitmq:3.9
         restart: unless-stopped
         environment:
             - RABBITMQ_NODE_TYPE=queue-disc
@@ -51,10 +68,10 @@ services:
             - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
             - RABBITMQ_LOGS=-
         volumes:
-            - .docker-data/rabbitmq2:/bitnami/rabbitmq/mnesia
+            - .docker-data/rabbitmq2:/bitnami
 
     rabbitmq3:
-        image: docker.io/bitnami/rabbitmq:3.9
+        image: bitnami/rabbitmq:3.9
         restart: unless-stopped
         environment:
             - RABBITMQ_NODE_TYPE=queue-ram
@@ -63,4 +80,4 @@ services:
             - RABBITMQ_ERL_COOKIE=s3cr3tc00ki3
             - RABBITMQ_LOGS=-
         volumes:
-            - .docker-data/rabbitmq3:/bitnami/rabbitmq/mnesia
+            - .docker-data/rabbitmq3:/bitnami

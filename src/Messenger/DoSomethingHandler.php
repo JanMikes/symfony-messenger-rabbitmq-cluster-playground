@@ -12,12 +12,14 @@ final class DoSomethingHandler implements MessageHandlerInterface
 {
     public function __invoke(DoSomething $message): void
     {
-        if ($message->randomNumber === 1) {
-            throw new TemporaryFail();
+        $randomNumber = random_int(1, 10);
+
+        if ($randomNumber === 1) {
+            throw new TemporaryFail('This is temporary fail - will be retried in few seconds. Seq: ' . $message->sequence);
         }
 
-        if ($message->randomNumber === 2) {
-            throw new PermanentFail();
+        if ($randomNumber === 2) {
+            throw new PermanentFail('This is permanent fail - will be moved to failed queue directly. Seq: ' . $message->sequence);
         }
     }
 }
